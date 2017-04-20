@@ -42,8 +42,10 @@ namespace ReadingFolder_App
             
             ReadFromFile read = new ReadFromFile();
             //read.ReadFeatures();
-           
+            read.ReadFeatures();
             read.Read_fileread();
+            
+            //read.Insert_Features_Value();
             
         }
     }
