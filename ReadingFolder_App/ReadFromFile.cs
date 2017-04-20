@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace ReadingFolder_App
             {
                 //Pass the file path and file name to the StreamReader constructor
                 StreamReader sr = new StreamReader(@"Francky_C_Cofeeshop.txt");
-                //StreamReader sr = new StreamReader(@"C:\Users\Beheerders\Desktop\Plagiarisme\ReadingFiles\ReadingFolder_App\ReadingFolder_App");
+                
 
                 //Read the first line of text
                 line = sr.ReadLine();
@@ -83,7 +84,7 @@ namespace ReadingFolder_App
 
 
                 }
-            //    Insert_Features_Value(wordCounted_splited);
+           
                 sr.Close();
             }
             catch (Exception)
@@ -103,14 +104,10 @@ namespace ReadingFolder_App
                     {
                         sw.WriteLine(wordCounted_splited[i]);
 
-                        //File.AppendAllText("features.txt", sw.WriteLine(wordCounted_splited[i]) + Environment.NewLine);
+                       
 
                     }
-                    //Write a line of text
-                    // sw.WriteLine("Hello World!!");
-
-                    //Write a second line of text
-                    // sw.WriteLine("From the StreamWriter class");
+                   
 
                     //Close the file
                     sw.Close();
@@ -151,15 +148,14 @@ namespace ReadingFolder_App
                         features.Add(item);
                     }
                     break;
-                    //Console.WriteLine(line);
-                    //Read the next line
+                   
 
                 }
 
                 //close the file
                 sr.Close();
 
-                //Console.ReadLine();
+                
             }
             catch (Exception e)
             {
@@ -172,42 +168,23 @@ namespace ReadingFolder_App
 
         public void Insert_Features_Value(List<Tuple<string, int>> counted_features)
         {
-           // var temp = new KeyValuePair<string, int>();
+           
+
             try
             {
-
+                List<Tuple<string, int>> c = new List<Tuple<string, int>>();
 
                 StreamWriter sw = new StreamWriter(@"file_to_save_x.txt");
-                
+              
                 foreach (string f in features)
                 {
                     for (int i = 0; i < counted_features.Count(); i++)
                     {
-                        if (counted_features[i].Item1 == f)
-                        {
-                            //Pass the filepath and filename to the StreamWriter Constructor
-
-                            sw.Write(counted_features[i].Item2);
-                        }
-                       
-                    }
-                }
-
-
-
-                for (int i = 0; i < counted_features.Count(); i++)
-                {
-                    foreach (string f in features)
-                    {
                         if (counted_features[i].Item1==f)
                         {
-                            sw.Write(counted_features[i].Item2);
-                            break;
-                        }
-                        else
-                        {
-                            sw.Write(0);
-                            break;
+                            c.Add(counted_features[i]);
+                            
+                          
                         }
                     }
                 }
@@ -215,36 +192,45 @@ namespace ReadingFolder_App
 
 
 
+                ArrayList feat_copy = new ArrayList();
+                
+                foreach (string st in features)
+                {
+                    feat_copy.Add(st);
+                }
 
+                for (int i = 0; i < feat_copy.Count; i++)
+               
+                {
+                    string temp = feat_copy[i].ToString();
+                    for (int j = 0; j < c.Count; j++)
+                    {
+                       
+                        if(feat_copy[i].ToString() == c[j].Item1)
+                        
+                        {
+                            feat_copy.Insert(feat_copy.IndexOf(temp), c[j].Item2);
+                            feat_copy.Remove(temp);
+                          
+                            
+                        }
 
+                    }
 
-                //Pass the file path and file name to the StreamReader constructor
-                //StreamReader sr = new StreamReader(@"file_to_save_A.txt");
+                    if (feat_copy.Contains(temp))
+                    { 
+                        feat_copy.Insert(feat_copy.IndexOf(temp), 0);
+                        feat_copy.Remove(temp);
+                        temp = null;
+                    }
 
-                ////Read the first line of text
-                //line = sr.ReadLine();
+                }
 
-                ////Continue to read until you reach end of file
-                //while (line != null)
-                //{
-                //        line = sr.ReadLine();
-                //        //write the lie to console window
-                //        foreach (string item in line.Split(','))
-                //        {
-
-
-
-
-                //            //  features.Add(item);
-                //        }
-                //        break;
-                //        //Console.WriteLine(line);
-                //        //Read the next line
-                //    }
-                //}
-
-                ////close the file
-                //sr.Close();
+                foreach (int val in feat_copy)
+                {
+                    sw.Write(val);
+                }
+                
                 sw.Close();
 
                 //Console.ReadLine();

@@ -14,6 +14,7 @@ C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\bin\Debug\ReadingFo
 C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\bin\Debug\ReadingFolder_App.pdb
 C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\bin\Debug\DocumentFormat.OpenXml.dll
 C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\obj\Debug\ReadingFolder_App.csprojResolveAssemblyReference.cache
 C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\obj\Debug\ReadingFolder_App.Form1.resources
 C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\obj\Debug\ReadingFolder_App.Properties.Resources.resources
 C:\Users\Beheerders\Documents\GitHub\P_APP\ReadingFolder_App\obj\Debug\ReadingFolder_App.csproj.GenerateResource.Cache
