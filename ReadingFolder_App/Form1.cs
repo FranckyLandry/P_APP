@@ -44,9 +44,10 @@ namespace ReadingFolder_App
             //read.ReadFeatures();
             read.ReadFeatures();
             read.Read_fileread();
-            
+            //read.test();
+
             //read.Insert_Features_Value();
-            
+
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace ReadingFolder_App
 {
@@ -15,7 +16,8 @@ namespace ReadingFolder_App
         private int counter = 0;
         private List<string> temp_word_splited_list = new List<string>();
         private List<Tuple<string, int>> wordCounted_splited = new List<Tuple<string, int>>();
-        private List<string> features = new List<string>();
+        private ArrayList features = new ArrayList();
+
 
 
 
@@ -26,6 +28,7 @@ namespace ReadingFolder_App
 
             try
             {
+
                 //Pass the file path and file name to the StreamReader constructor
                 StreamReader sr = new StreamReader(@"Francky_C_Cofeeshop.txt");
                 
@@ -70,7 +73,7 @@ namespace ReadingFolder_App
                                         wordCounted_splited.RemoveAt(i);
                                         temp_store = new KeyValuePair<string, int>(w, counter);
                                         wordCounted_splited.Add(new Tuple<string, int>(temp_store.Key, temp_store.Value));
-                                        
+
                                         break;
                                     }
                                 }
@@ -84,7 +87,7 @@ namespace ReadingFolder_App
 
 
                 }
-           
+
                 sr.Close();
             }
             catch (Exception)
@@ -104,14 +107,14 @@ namespace ReadingFolder_App
                     {
                         sw.WriteLine(wordCounted_splited[i]);
 
-                       
+
 
                     }
-                   
+
 
                     //Close the file
                     sw.Close();
-                    Insert_Features_Value(wordCounted_splited);
+                    Get_Features_Value(wordCounted_splited);
                 }
                 catch (Exception e)
                 {
@@ -126,7 +129,7 @@ namespace ReadingFolder_App
         }
 
 
-        public List<string> ReadFeatures()
+        public ArrayList ReadFeatures()
         {
 
             String line;
@@ -148,14 +151,14 @@ namespace ReadingFolder_App
                         features.Add(item);
                     }
                     break;
-                   
+
 
                 }
 
                 //close the file
                 sr.Close();
 
-                
+
             }
             catch (Exception e)
             {
@@ -166,84 +169,126 @@ namespace ReadingFolder_App
         }
 
 
-        public void Insert_Features_Value(List<Tuple<string, int>> counted_features)
+        public void Get_Features_Value(List<Tuple<string, int>> counted_features)
         {
-           
-
             try
             {
-                List<Tuple<string, int>> c = new List<Tuple<string, int>>();
+                List<Tuple<string, int>> content = new List<Tuple<string, int>>();
 
-                StreamWriter sw = new StreamWriter(@"file_to_save_x.txt");
-              
+               
+                
+
                 foreach (string f in features)
                 {
                     for (int i = 0; i < counted_features.Count(); i++)
                     {
-                        if (counted_features[i].Item1==f)
+                        if (counted_features[i].Item1 == f)
                         {
-                            c.Add(counted_features[i]);
-                            
-                          
+                            content.Add(counted_features[i]);
                         }
                     }
                 }
-
-
-
-
-                ArrayList feat_copy = new ArrayList();
-                
-                foreach (string st in features)
+                // if features exist in the file then insert its value
+                for (int i = 0; i < features.Count; i++)
                 {
-                    feat_copy.Add(st);
-                }
-
-                for (int i = 0; i < feat_copy.Count; i++)
-               
-                {
-                    string temp = feat_copy[i].ToString();
-                    for (int j = 0; j < c.Count; j++)
+                    string temp = features[i].ToString();
+                    for (int j = 0; j < content.Count; j++)
                     {
-                       
-                        if(feat_copy[i].ToString() == c[j].Item1)
-                        
+
+                        if (features[i].ToString() == content[j].Item1)
                         {
-                            feat_copy.Insert(feat_copy.IndexOf(temp), c[j].Item2);
-                            feat_copy.Remove(temp);
-                          
-                            
+                            features.Insert(features.IndexOf(temp), content[j].Item2);
+                            features.Remove(temp);
                         }
 
                     }
-
-                    if (feat_copy.Contains(temp))
-                    { 
-                        feat_copy.Insert(feat_copy.IndexOf(temp), 0);
-                        feat_copy.Remove(temp);
+                    // if not found the value changes to zero
+                    if (features.Contains(temp))
+                    {
+                        features.Insert(features.IndexOf(temp), 0);
+                        features.Remove(temp);
                         temp = null;
                     }
 
                 }
 
-                foreach (int val in feat_copy)
+             
+
+
+               
+                switch (CheckFile_is_empty())
                 {
-                    sw.Write(val);
+                    case false:
+                        bool first = false;
+                   
+                        for (int i = 0; i< features.Count;i++)
+                        {
+
+                            if (first == false)
+                            { 
+                                File.AppendAllText(@"file_to_save_x.txt", Environment.NewLine);
+                                i--;
+                               
+                            }
+                            else
+                                File.AppendAllText(@"file_to_save_x.txt",features[i].ToString()+",");
+                            first = true;
+                        }
+                        features.Add("Class C");
+                        int lastIndex = features.Count - 1;
+                        File.AppendAllText(@"file_to_save_x.txt", features[lastIndex].ToString());
+
+                        break;
+                    default:
+                        
+                        foreach (int val in features)
+                        {
+                            File.AppendAllText(@"file_to_save_x.txt", val.ToString()+"," );
+                        }
+                        features.Add("Class C");
+                        int lastI = features.Count - 1;
+                        File.AppendAllText(@"file_to_save_x.txt", features[lastI].ToString());
+                     
+                        break;
                 }
                 
-                sw.Close();
-
-                //Console.ReadLine();
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
-            //return features;
+        }
+        public bool CheckFile_is_empty()
+        {
+            //MethodBase b = MethodInfo.GetCurrentMethod();
+
+            string text = System.IO.File.ReadAllText(@"file_to_save_x.txt");
+
+            if ( text !="")
+            {
+                return false;
+            }
+            else
+                return true;
+            
+            
+            //System.Console.WriteLine("Contents of WriteText.txt = {0}", text);
+
+            //string[] lines = System.IO.File.ReadAllLines(@"Francky_A_Camping.txt");
+
+            //// Display the file contents by using a foreach loop.
+            //System.Console.WriteLine("Contents of WriteLines2.txt = ");
+            //foreach (string line in lines)
+            //{
+            //    // Use a tab to indent each line of the file.
+            //    Console.WriteLine("\t" + line);
+            //    b.GetMethodBody();
+            //}
+
 
         }
 
 
 
     }
-}
+    }
